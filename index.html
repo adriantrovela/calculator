@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 10 Style Calculator</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .calculator {
+            width: 320px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f4f4f4;
+        }
+        .display {
+            font-size: 32px;
+            text-align: right;
+            padding: 10px;
+            background-color: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .btn {
+            font-size: 20px;
+            padding: 20px;
+            margin: 5px;
+        }
+        .btn-equal {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-operator {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-clear {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <input type="text" id="display" class="display" disabled />
+        <div class="buttons">
+            <div class="row">
+                <button class="col btn btn-light" onclick="appendNumber(7)">7</button>
+                <button class="col btn btn-light" onclick="appendNumber(8)">8</button>
+                <button class="col btn btn-light" onclick="appendNumber(9)">9</button>
+                <button class="col btn btn-operator" onclick="setOperator('+')">+</button>
+            </div>
+            <div class="row">
+                <button class="col btn btn-light" onclick="appendNumber(4)">4</button>
+                <button class="col btn btn-light" onclick="appendNumber(5)">5</button>
+                <button class="col btn btn-light" onclick="appendNumber(6)">6</button>
+                <button class="col btn btn-operator" onclick="setOperator('-')">-</button>
+            </div>
+            <div class="row">
+                <button class="col btn btn-light" onclick="appendNumber(1)">1</button>
+                <button class="col btn btn-light" onclick="appendNumber(2)">2</button>
+                <button class="col btn btn-light" onclick="appendNumber(3)">3</button>
+                <button class="col btn btn-operator" onclick="setOperator('*')">*</button>
+            </div>
+            <div class="row">
+                <button class="col btn btn-light" onclick="appendNumber(0)">0</button>
+                <button class="col btn btn-light" onclick="appendDecimal()">.</button>
+                <button class="col btn btn-clear" onclick="clearDisplay()">C</button>
+                <button class="col btn btn-operator" onclick="setOperator('/')">/</button>
+            </div>
+            <div class="row">
+                <button class="col-12 btn btn-equal" onclick="calculateResult()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentInput = '';
+        let operator = '';
+        let previousInput = '';
+
+        function appendNumber(number) {
+            currentInput += number;
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
+
+        function setOperator(op) {
+            if (currentInput === '') return;
+            if (previousInput !== '') {
+                calculateResult();
+            }
+            operator = op;
+            previousInput = currentInput;
+            currentInput = '';
+        }
+
+        function calculateResult() {
+            if (previousInput === '' || currentInput === '') return;
+            let result;
+            switch (operator) {
+                case '+':
+                    result = parseFloat(previousInput) + parseFloat(currentInput);
+                    break;
+                case '-':
+                    result = parseFloat(previousInput) - parseFloat(currentInput);
+                    break;
+                case '*':
+                    result = parseFloat(previousInput) * parseFloat(currentInput);
+                    break;
+                case '/':
+                    result = parseFloat(previousInput) / parseFloat(currentInput);
+                    break;
+                default:
+                    return;
+            }
+            currentInput = result.toString();
+            operator = '';
+            previousInput = '';
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            operator = '';
+            previousInput = '';
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('display').value = currentInput;
+        }
+    </script>
+</body>
+</html>
